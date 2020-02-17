@@ -20,14 +20,8 @@ class Api::V1::GamesController < ApplicationController
       Winner: game_params['Winner'],
       Loser: game_params['Loser'],
       })
-    # GameUser.create(game_id: @game.id, user_id: game_params)
-    # GameUser.create(game_id: @game.id, user_id: game_params)
-  end
-
-  def edit
-  end
-
-  def update
+    GameUser.create(game_id: @game.id, user_id: game_params)
+    GameUser.create(game_id: @game.id, user_id: game_params)
   end
 
   def destroy
