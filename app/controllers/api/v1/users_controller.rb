@@ -11,18 +11,15 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
-  def new
-    @user = User.new
-  end
-
   def create
-    @user = User.create(user_params)
+    @user = User.new(user_params)
+    if @user.save 
+      render json: @user 
+    else
+      render status: 418
+    end
   end
-
-  def edit
-    @user = User.find(params[:id])
-  end
-
+  
   def update
     @user.update(user_params)
     if @user.save

@@ -1,7 +1,7 @@
 class Api::V1::GamesController < ApplicationController
 
-  before_action :find_game, only: [:show, :update, :delete]
-  before_action :get_all_games, only: [:index, :create, :delete]
+  before_action :find_game, only: [:show, :update, :destroy]
+  before_action :get_all_games, only: [:index, :create, :destroy]
 
   def index
     render json: @games
@@ -11,20 +11,21 @@ class Api::V1::GamesController < ApplicationController
     render json: @game
   end
 
-  def new
-    @game = Game.new
-  end
-
   def create
-    @game = Game.create(stats: {
+    @game = Game.new(stats: {
       Winner: game_params['Winner'],
       Loser: game_params['Loser'],
       })
-    GameUser.create(game_id: @game.id, user_id: game_params)
-    GameUser.create(game_id: @game.id, user_id: game_params)
+    if @game.save
+      GameUser.create(game_id: @game.id, user_id: game_params)
+      GameUser.create(game_id: @game.id, user_id: game_params)
+    else
+      render status: 417
+    end
   end
 
   def destroy
+    @game.destroy 
   end
 
   private
